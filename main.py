@@ -2,11 +2,14 @@ import settings
 import telebot
 import random
 
+candies = 0
+
 bot = telebot.TeleBot(settings.BOT_TOKEN)
 
 @bot.message_handler(commands=['help'])
 def help(message):
-    mess = '<u>Для работы с калькулятором введите /calc "выражение"</u>'
+    mess = 'Для работы с калькулятором введите <b>/calc "выражение"</b>\n'
+    mess += 'Для игры в конфеты <b>/candy</b>\n'
     bot.send_message(message.chat.id, mess, parse_mode='html')
 
 @bot.message_handler(commands=['calc'])
@@ -15,24 +18,40 @@ def calc(message):
     arg = ''
     if len(args) > 1:
         arg = ''.join(args[1:])
-    result = eval(arg)
-    mess = result
-    bot.send_message(message.chat.id, mess, parse_mode='html')
+        mess = eval(arg)
+        bot.send_message(message.chat.id, mess, parse_mode='html')
+    else:
+        mess = 'Введите выражение в виде: /calc "выражение"'
+        bot.send_message(message.chat.id, mess, parse_mode='html')
 
 @bot.message_handler(commands=['candy'])
 def candy(message):
+    global candies
     candies = random.randint(20, 30)
-    #print(candies)
-    while candies > 0:
-        mess = f'Конфет на столе {candies}\n'
-        mess += 'Можно взять до 4 шт\n'
-        bot.send_message(message.chat.id, mess, parse_mode='html')
+    mess = f'Конфет на столе {candies}\n'
+    mess += 'Можно взять до 4 шт\n'
+    bot.send_message(message.chat.id, mess, parse_mode='html')
 
-        @bot.message_handler()
-        def input_candy(message):
-            input()
-            get_candies = int(message.text)
-            print(get_candies)
-    #candies
+@bot.message_handler()
+def input_candy(message):
+    global candies
+    if message.text in '1234' and candies != 0:
+        get_candies = int(message.text)
+        candies -= get_candies
+        if candies <= 0:
+            mess = '<u>Победа!</u>'
+            bot.send_message(message.chat.id, mess, parse_mode='html')
+        else:
+            mess = f'Конфет на столе {candies}\n'
+            mess += 'Можно взять до '
+            if candies >= 4:
+                mess += '4 шт\n'
+            else:
+                mess += f'{candies} шт.'
+            bot.send_message(message.chat.id, mess, parse_mode='html')
+
+    #print(get_candies)
+    #print(candies)
+
 
 bot.polling(none_stop=True)
