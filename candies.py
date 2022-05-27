@@ -1,7 +1,6 @@
 import random
 
 cand = 0
-bot_action = True
 
 
 def bot_logic(num):
