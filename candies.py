@@ -2,7 +2,7 @@ import random
 
 cand = 0
 
-
+# Логика бота: берем остаток от деления на 5 или 1
 def bot_logic(num):
     if num % 5 == 0:
         return 1
@@ -11,8 +11,10 @@ def bot_logic(num):
 
 
 def init_candy(message):
-    global cand, bot_action
+    global cand
+    # Количество конфет на старте
     cand = random.randint(20, 30)
+    # Первый игрок бот/пользователь
     bot_action = random.choice([True, False])
     mess = f'Конфет на столе <b>{cand}</b>\n'
     mess += 'Можно взять до <b>4</b> шт\n'
