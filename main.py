@@ -23,7 +23,7 @@ def calc(message):
 
 @bot.message_handler(commands=['candy'])
 def init_candy(message):
-    bot.send_message(message.chat.id, candies.init_candy(), parse_mode='html')
+    bot.send_message(message.chat.id, candies.init_candy(message), parse_mode='html')
 
 
 @bot.message_handler()
