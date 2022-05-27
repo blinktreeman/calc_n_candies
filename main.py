@@ -1,4 +1,5 @@
 import settings
+import math_part
 import telebot
 import random
 
@@ -14,15 +15,7 @@ def help(message):
 
 @bot.message_handler(commands=['calc'])
 def calc(message):
-    args = message.text.split()
-    arg = ''
-    if len(args) > 1:
-        arg = ''.join(args[1:])
-        mess = eval(arg)
-        bot.send_message(message.chat.id, mess, parse_mode='html')
-    else:
-        mess = 'Введите выражение в виде: /calc "выражение"'
-        bot.send_message(message.chat.id, mess, parse_mode='html')
+    bot.send_message(message.chat.id, math_part.calc(message), parse_mode='html')
 
 @bot.message_handler(commands=['candy'])
 def candy(message):
